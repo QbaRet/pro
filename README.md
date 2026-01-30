@@ -51,8 +51,8 @@ Poniżej kilka typowych interakcji z programem:
 > python main.py
 1. Rejestracja nowego konta
 Podaj login: janek
-Podaj hasło: ********
-Powtórz hasło: ********
+Podaj hasło: haslo
+Powtórz hasło: haslo
 Zarejestrowano pomyślnie!
 ```
 
@@ -61,7 +61,7 @@ Zarejestrowano pomyślnie!
 > python main.py
 1. Logowanie
 Login: admin
-Hasło: ********
+Hasło: haslo
 Zalogowano jako ADMIN
 3. Przeglądaj mecze (wg sezonu)
 Podaj ID sezonu: 9
