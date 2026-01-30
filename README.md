@@ -195,13 +195,7 @@ System realizuje operacje CRUD oraz zaawansowane filtrowanie i analizę danych.
 │ new_score                    │ (np. "1:0")
 │ change_date                  │ TIMESTAMP
 └──────────────────────────────┘
-```
-        │ id (PK)          │
-                       │ team_id (FK)     │
-                       │ first_name       │
-                       │ last_name        │
-                       │ position         │
-                       └──────────────────┘
+
 ┌──────────────────────────────┐
 │     audit_logs               │ (tabela dla triggera)
 │──────────────────────────────│
