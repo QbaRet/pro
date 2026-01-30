@@ -11,53 +11,51 @@
 
 ## Spis treści
 
-1. [Najczęściej zadawane pytania (FAQ)](#najczesciej-zadawane-pytania-faq)
-2. [Architektura i filozofia projektu](#architektura-i-filozofia-projektu)
-3. [Przykładowe użycie CLI](#przykladowe-uzycie-cli)
-4. [Rozbudowane scenariusze użytkownika](#rozbudowane-scenariusze-uzytkownika)
-5. [Schemat bazy danych](#schemat-bazy-danych)
-6. [Opis tabel](#opis-tabel)
-7. [Relacje między tabelami](#relacje-miedzy-tabelami)
-8. [Normalizacja bazy danych](#normalizacja-bazy-danych)
-9. [Prawa dostępu](#prawa-dostepu)
-10. [Trigger SQL](#trigger-sql)
-11. [Transakcje i spójność](#transakcje-i-spojnosc)
-12. [Bezpieczeństwo](#bezpieczenstwo)
-13. [Możliwości rozbudowy i integracji](#mozliwosci-rozbudowy-i-integracji)
-14. [Instrukcja uruchomienia](#instrukcja-uruchomienia)
-15. [Kontakt i wsparcie](#kontakt-i-wsparcie)
+1. [Architektura i filozofia projektu](#architektura-i-filozofia-projektu)
+2. [Przykładowe użycie CLI](#przykladowe-uzycie-cli)
+3. [Rozbudowane scenariusze użytkownika](#rozbudowane-scenariusze-uzytkownika)
+4. [Schemat bazy danych](#schemat-bazy-danych)
+5. [Opis tabel](#opis-tabel)
+6. [Relacje między tabelami](#relacje-miedzy-tabelami)
+7. [Normalizacja bazy danych](#normalizacja-bazy-danych)
+8. [Prawa dostępu](#prawa-dostepu)
+9. [Trigger SQL](#trigger-sql)
+10. [Transakcje i spójność](#transakcje-i-spojnosc)
+11. [Bezpieczeństwo](#bezpieczenstwo)
+12. [Możliwości rozbudowy i integracji](#mozliwosci-rozbudowy-i-integracji)
+13. [Instrukcja uruchomienia](#instrukcja-uruchomienia)
+14. [Kontakt i wsparcie](#kontakt-i-wsparcie)
 
----
 
 
 ## Architektura i filozofia projektu
-
+## 1. Architektura i filozofia projektu
 Projekt jest prosty i nieskomplikowany. Każda funkcja CLI jest osobnym, czytelnym modułem. Dane przechowywane są w relacyjnej bazie SQLite, co zapewnia łatwość przenoszenia i brak wymagań serwerowych. System jest odporny na typowe błędy użytkownika (np. podwójne wpisy, nieprawidłowe dane) dzięki walidacji i transakcjom.
-
+## 2. Przykładowe użycie CLI
 Główne założenia:
-- Minimalizm interfejsu (CLI, bez zbędnych pytań)
+## 3. Rozbudowane scenariusze użytkownika
 - Bezpieczeństwo danych (hashowanie haseł, transakcje, audyt zmian)
-- Możliwość łatwej rozbudowy (np. eksport do CSV, REST API, integracja z frontendem)
+## 4. Schemat bazy danych
 
-
+## 5. Opis tabel
 ---
+## 6. Relacje między tabelami
 
+## 7. Normalizacja bazy danych
 
-## Przykładowe użycie CLI
+## 8. Prawa dostępu
 
-Poniżej kilka typowych interakcji z programem:
-
-**Rejestracja nowego użytkownika:**
+## 9. Trigger SQL
 ```
-> python main.py
+## 10. Transakcje i spójność
 1. Rejestracja nowego konta
-Podaj login: janek
+## 11. Bezpieczeństwo
 Podaj hasło: ********
-Powtórz hasło: ********
+## 12. Możliwości rozbudowy i integracji
 Zarejestrowano pomyślnie!
-```
+## 13. Instrukcja uruchomienia
 
-**Logowanie i przeglądanie meczów:**
+## 14. Kontakt i wsparcie
 ```
 > python main.py
 1. Logowanie
