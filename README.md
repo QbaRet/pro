@@ -9,42 +9,36 @@
 
 ---
 
-## Wprowadzenie i motywacja
-
-Football Match Center powstał z myślą o osobach, które chcą w prosty sposób zarządzać danymi piłkarskimi – od amatorskich lig, przez szkolne turnieje, po archiwizację statystyk ulubionych drużyn. System pozwala na szybkie wprowadzanie wyników, śledzenie historii spotkań i generowanie tabel ligowych bez konieczności korzystania z rozbudowanych, komercyjnych narzędzi.
-
-Projekt jest w pełni otwarty na rozbudowę i integrację z innymi narzędziami. Kod źródłowy jest czytelny, a architektura modularna.
-
----
-
 ## Spis treści
 
-1. [Cel aplikacji](#1-cel-aplikacji)
-2. [Charakterystyka użytkowników](#2-charakterystyka-użytkowników)
-3. [Wymagania funkcjonalne](#3-wymagania-funkcjonalne)
-4. [Schemat bazy danych](#4-schemat-bazy-danych)
-5. [Opis tabel i kluczy](#5-opis-tabel-i-kluczy)
-6. [Relacje między tabelami](#6-relacje-między-tabelami)
-7. [Normalizacja bazy danych](#7-normalizacja-bazy-danych)
-8. [Prawa dostępu](#8-prawa-dostępu)
-9. [Trigger SQL](#9-trigger-sql)
-10. [Transakcje](#10-transakcje)
-11. [Bezpieczeństwo](#11-bezpieczeństwo)
-12. [Instrukcja uruchomienia](#12-instrukcja-uruchomienia)
+1. [Najczęściej zadawane pytania (FAQ)](#najczesciej-zadawane-pytania-faq)
+2. [Architektura i filozofia projektu](#architektura-i-filozofia-projektu)
+3. [Przykładowe użycie CLI](#przykladowe-uzycie-cli)
+4. [Rozbudowane scenariusze użytkownika](#rozbudowane-scenariusze-uzytkownika)
+5. [Schemat bazy danych](#schemat-bazy-danych)
+6. [Opis tabel](#opis-tabel)
+7. [Relacje między tabelami](#relacje-miedzy-tabelami)
+8. [Normalizacja bazy danych](#normalizacja-bazy-danych)
+9. [Prawa dostępu](#prawa-dostepu)
+10. [Trigger SQL](#trigger-sql)
+11. [Transakcje i spójność](#transakcje-i-spojnosc)
+12. [Bezpieczeństwo](#bezpieczenstwo)
+13. [Możliwości rozbudowy i integracji](#mozliwosci-rozbudowy-i-integracji)
+14. [Instrukcja uruchomienia](#instrukcja-uruchomienia)
+15. [Kontakt i wsparcie](#kontakt-i-wsparcie)
 
 ---
 
 
 ## Architektura i filozofia projektu
 
-Projekt opiera się na zasadzie „prosto, ale solidnie”. Każda funkcja CLI jest osobnym, czytelnym modułem. Dane przechowywane są w relacyjnej bazie SQLite, co zapewnia łatwość przenoszenia i brak wymagań serwerowych. System jest odporny na typowe błędy użytkownika (np. podwójne wpisy, nieprawidłowe dane) dzięki walidacji i transakcjom.
+Projekt jest prosty i nieskomplikowany. Każda funkcja CLI jest osobnym, czytelnym modułem. Dane przechowywane są w relacyjnej bazie SQLite, co zapewnia łatwość przenoszenia i brak wymagań serwerowych. System jest odporny na typowe błędy użytkownika (np. podwójne wpisy, nieprawidłowe dane) dzięki walidacji i transakcjom.
 
 Główne założenia:
 - Minimalizm interfejsu (CLI, bez zbędnych pytań)
 - Bezpieczeństwo danych (hashowanie haseł, transakcje, audyt zmian)
 - Możliwość łatwej rozbudowy (np. eksport do CSV, REST API, integracja z frontendem)
 
----
 
 ---
 
@@ -520,7 +514,7 @@ Przy dodawaniu wyniku meczu i strzelców konieczne jest:
 2. Dodanie wpisów dla każdego strzelcy w tabeli `match_events`
 3. Zautomatyzowanie logowania w `audit_logs` (trigger)
 
-Te operacje muszą być wykonane **atomowo** - albo wszystkie, albo żadna.
+Te operacje muszą być wykonane **atomowo** 
 
 ### 10.2 Implementacja transakcji
 
@@ -765,74 +759,3 @@ python setup_db.py
 - System powiadomień e-mail/SMS o nowych wynikach
 
 ---
-
-## Najczęściej zadawane pytania (FAQ)
-
-**Czy mogę dodać własne pola do tabel?**  
-Tak, wystarczy zmodyfikować plik `setup_db.py` i dodać odpowiednie kolumny oraz zmienić funkcje w `database.py`.
-
-**Czy można korzystać z bazy na kilku komputerach?**  
-Baza SQLite to pojedynczy plik – można go przenosić, kopiować, synchronizować przez chmurę.
-
-**Jak dodać nową rolę użytkownika?**  
-Należy dodać nową wartość w polu `role` w tabeli `users` i rozbudować logikę w `main.py`.
-
-**Czy system nadaje się do dużych lig?**  
-Tak, choć przy bardzo dużych bazach (tysiące meczów) warto rozważyć migrację do PostgreSQL/MySQL.
-
-**Jak zrobić backup?**  
-Wystarczy skopiować plik `football.db`.
-
----
-
-
-## Kontakt i wsparcie
-
-Wszelkie pytania, zgłoszenia błędów i propozycje rozwoju:
-- e-mail: jakub.retmańczyk@example.com
-- github: github.com/jakubretmanczyk/football-match-center
-
----
-        string name
-        date start_date
-    }
-    teams {
-        int id PK
-        string name
-        string city
-    }
-    players {
-        int id PK
-        int team_id FK
-        string last_name
-        string position
-    }
-    matches {
-        int id PK
-        int season_id FK
-        int home_team_id FK
-        int away_team_id FK
-        int home_score
-        int away_score
-    }
-    match_events {
-        int id PK
-        int match_id FK
-        int player_id FK
-        string event_type
-        int minute
-    }
-    audit_logs {
-        int id PK
-        int match_id FK
-        string old_score
-        string new_score
-    }
-
-    teams ||--o{ players : "posiada"
-    seasons ||--o{ matches : "organizuje"
-    teams ||--o{ matches : "gra jako gospodarz"
-    teams ||--o{ matches : "gra jako gość"
-    matches ||--o{ match_events : "zawiera"
-    players ||--o{ match_events : "jest autorem"
-    matches ||--o{ audit_logs : "jest monitorowany"
