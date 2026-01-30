@@ -196,17 +196,6 @@ System realizuje operacje CRUD oraz zaawansowane filtrowanie i analizę danych.
 │ change_date                  │ TIMESTAMP
 └──────────────────────────────┘
 
-┌──────────────────────────────┐
-│     audit_logs               │ (tabela dla triggera)
-│──────────────────────────────│
-│ id (PK)                      │
-│ match_id (FK)                │
-│ old_score                    │ (np. "0:0")
-│ new_score                    │ (np. "1:0")
-│ change_date                  │ TIMESTAMP
-└──────────────────────────────┘
-```
-
 ---
 
 ## 5. Opis tabel i kluczy
