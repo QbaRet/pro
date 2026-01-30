@@ -725,29 +725,6 @@ python setup_db.py
 5. Usuń piłkarza (Delete)
 ```
 
-
-## Rozbudowane scenariusze użytkownika
-
-### Przykład A: Organizator ligi szkolnej
-1. Tworzy konta dla siebie (admin) i kolegów (user)
-2. Wprowadza listę drużyn i piłkarzy
-3. Po każdym meczu wpisuje wyniki i strzelców
-4. Udostępnia kibicom możliwość przeglądania tabeli i statystyk
-5. W razie pomyłki – edytuje lub usuwa dane (tylko admin)
-
-### Przykład B: Kibic śledzi ulubioną drużynę
-1. Rejestruje się jako user
-2. Wyszukuje mecze swojej drużyny
-3. Przegląda szczegóły spotkań i statystyki strzelców
-4. Porównuje wyniki z innymi sezonami
-
-### Przykład C: Testowanie bezpieczeństwa
-1. Próbuje zalogować się na nieistniejące konto – system odrzuca
-2. Próbuje wstrzyknąć SQL w loginie – system blokuje
-3. Próbuje dodać mecz bez uprawnień – brak dostępu
-
----
-
 ## Możliwości rozbudowy i integracji
 
 - Eksport danych do CSV/Excel
