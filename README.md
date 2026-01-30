@@ -196,6 +196,8 @@ System realizuje operacje CRUD oraz zaawansowane filtrowanie i analizę danych.
 │ change_date                  │ TIMESTAMP
 └──────────────────────────────┘
 
+```
+
 ---
 
 ## 5. Opis tabel i kluczy
