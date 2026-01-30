@@ -24,38 +24,39 @@
 11. [Bezpieczeństwo](#bezpieczenstwo)
 12. [Możliwości rozbudowy i integracji](#mozliwosci-rozbudowy-i-integracji)
 13. [Instrukcja uruchomienia](#instrukcja-uruchomienia)
-14. [Kontakt i wsparcie](#kontakt-i-wsparcie)
 
+
+---
 
 
 ## Architektura i filozofia projektu
-## 1. Architektura i filozofia projektu
+
 Projekt jest prosty i nieskomplikowany. Każda funkcja CLI jest osobnym, czytelnym modułem. Dane przechowywane są w relacyjnej bazie SQLite, co zapewnia łatwość przenoszenia i brak wymagań serwerowych. System jest odporny na typowe błędy użytkownika (np. podwójne wpisy, nieprawidłowe dane) dzięki walidacji i transakcjom.
-## 2. Przykładowe użycie CLI
+
 Główne założenia:
-## 3. Rozbudowane scenariusze użytkownika
+- Minimalizm interfejsu (CLI, bez zbędnych pytań)
 - Bezpieczeństwo danych (hashowanie haseł, transakcje, audyt zmian)
-## 4. Schemat bazy danych
+- Możliwość łatwej rozbudowy (np. eksport do CSV, REST API, integracja z frontendem)
 
-## 5. Opis tabel
+
 ---
-## 6. Relacje między tabelami
 
-## 7. Normalizacja bazy danych
 
-## 8. Prawa dostępu
+## Przykładowe użycie CLI
 
-## 9. Trigger SQL
+Poniżej kilka typowych interakcji z programem:
+
+**Rejestracja nowego użytkownika:**
 ```
-## 10. Transakcje i spójność
+> python main.py
 1. Rejestracja nowego konta
-## 11. Bezpieczeństwo
+Podaj login: janek
 Podaj hasło: ********
-## 12. Możliwości rozbudowy i integracji
+Powtórz hasło: ********
 Zarejestrowano pomyślnie!
-## 13. Instrukcja uruchomienia
+```
 
-## 14. Kontakt i wsparcie
+**Logowanie i przeglądanie meczów:**
 ```
 > python main.py
 1. Logowanie
