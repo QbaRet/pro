@@ -1,9 +1,19 @@
-# Dokumentacja projektu: Football Match Center
-## System Obsługi Rozgrywek Piłkarskich (CLI)
 
-**Autor:** Jakub Kubarek  
-**Data:** Styczeń 2026  
-**Technologia:** Python + SQLite  
+# Football Match Center
+
+**Kompleksowy system do zarządzania rozgrywkami piłkarskimi**
+
+**Autor:** Jakub Retmańczyk  
+**Wersja:** 1.0 (2026)  
+**Technologie:** Python 3.7+, SQLite 3.0+
+
+---
+
+## Wprowadzenie i motywacja
+
+Football Match Center powstał z myślą o osobach, które chcą w prosty sposób zarządzać danymi piłkarskimi – od amatorskich lig, przez szkolne turnieje, po archiwizację statystyk ulubionych drużyn. System pozwala na szybkie wprowadzanie wyników, śledzenie historii spotkań i generowanie tabel ligowych bez konieczności korzystania z rozbudowanych, komercyjnych narzędzi.
+
+Projekt jest w pełni otwarty na rozbudowę i integrację z innymi narzędziami. Kod źródłowy jest czytelny, a architektura modularna.
 
 ---
 
@@ -24,76 +34,72 @@
 
 ---
 
-## 1. Cel aplikacji
 
-**Football Match Center** to aplikacja konsolowa służąca do gromadzenia, przetwarzania i analizy wyników rozgrywek piłkarskich. System oparty jest na relacyjnej bazie danych SQLite i umożliwia zarządzanie pełnym cyklem życia danych meczowych – od planowania, przez wprowadzanie wyników, aż po generowanie tabel ligowych z automatyczną audytowalności zmian.
+## Architektura i filozofia projektu
 
-### 1.1 Główne cele systemu
+Projekt opiera się na zasadzie „prosto, ale solidnie”. Każda funkcja CLI jest osobnym, czytelnym modułem. Dane przechowywane są w relacyjnej bazie SQLite, co zapewnia łatwość przenoszenia i brak wymagań serwerowych. System jest odporny na typowe błędy użytkownika (np. podwójne wpisy, nieprawidłowe dane) dzięki walidacji i transakcjom.
 
-1. **Archiwizacja danych** - trwałe przechowywanie historii meczów, drużyn i zawodników z podziałem na sezony (2016/2017 do 2024/2025)
-2. **Analiza rozgrywek** - automatyczne generowanie tabeli ligowej (punkty, bilans bramek, wygrane/remisy/przegrane) na podstawie surowych wyników meczów
-3. **Zarządzanie strukturą ligi** - pełna obsługa CRUD (tworzenie, edycja, usuwanie) dla drużyn, piłkarzy i meczów
-4. **Śledzenie zdarzeń meczowych** - rejestrowanie bramek i kartek dla każdego zawodnika z określeniem minuty
-5. **Audytowalność** - automatyczne logowanie zmian wyników meczów do tabeli audit_logs za pomocą triggera SQL
-
-### 1.2 Zakres funkcjonalny
-
-System obsługuje pełny cykl życia danych meczowych:
-- Rejestracja użytkowników z przypisaną rolą (admin/user)
-- Logowanie do systemu z weryfikacją hasła
-- Przeglądanie meczów i drużyn z opcjonalnym filtrowaniem po sezonie
-- Wyszukiwanie meczów drużyny po nazwie
-- Generowanie tabel ligowych z automatycznym obliczeniem punktów i bilansu bramek
-- Dodawanie wyników meczów i strzelców (tylko admin)
-- Zarządzanie drużynami i piłkarzami (CRUD - tylko admin)
-- Usuwanie meczów i piłkarzy (tylko admin)
-- Automatyczne logowanie zmian wyników meczów (trigger SQL)
+Główne założenia:
+- Minimalizm interfejsu (CLI, bez zbędnych pytań)
+- Bezpieczeństwo danych (hashowanie haseł, transakcje, audyt zmian)
+- Możliwość łatwej rozbudowy (np. eksport do CSV, REST API, integracja z frontendem)
 
 ---
 
-## 2. Charakterystyka użytkowników
+---
 
-System przewiduje **dwa typy użytkowników** o zróżnicowanych uprawnieniach:
 
-### 2.1 Administrator (`role = 'admin'`)
+## Przykładowe użycie CLI
 
-**Charakterystyka:**
-- Pracownik związku piłki nożnej lub administrator systemu
-- Posiada pełny dostęp do modyfikacji danych (CRUD - zapis/odczyt/usuwanie)
-- Odpowiada za spójność i poprawność danych w bazie
-- Ma dostęp do panelu administratora w aplikacji konsolowej
+Poniżej kilka typowych interakcji z programem:
 
-**Typowe zadania:**
-- Dodawanie i edycja wyników meczów
-- Rejestrowanie strzelców i minut bramek
-- Dodawanie nowych drużyn do systemu
-- Dodawanie piłkarzy do drużyn
-- Usuwanie meczów i piłkarzy (w przypadku błędów)
-- Przeglądanie wszystkich danych bez ograniczeń
-- Zarządzanie kont użytkowników i uprawnieniami
+**Rejestracja nowego użytkownika:**
+```
+> python main.py
+1. Rejestracja nowego konta
+Podaj login: janek
+Podaj hasło: ********
+Powtórz hasło: ********
+Zarejestrowano pomyślnie!
+```
 
-**Domyślne konto:**
-- Login: `admin`
-- Hasło: `adminpass`
+**Logowanie i przeglądanie meczów:**
+```
+> python main.py
+1. Logowanie
+Login: admin
+Hasło: ********
+Zalogowano jako ADMIN
+3. Przeglądaj mecze (wg sezonu)
+Podaj ID sezonu: 9
+Lista meczów:
+2024-09-01 | Real Madryt 2:1 FC Barcelona
+...
+```
 
-### 2.2 Użytkownik zwykły / Kibic (`role = 'user'`)
+**Dodawanie wyniku i strzelców (admin):**
+```
+6. Panel ADMIN
+1. Edytuj wynik meczu
+Podaj ID meczu: 15
+Gole gospodarzy: 3
+Gole gości: 2
+Dodać strzelca? (t/n): t
+ID piłkarza: 7
+Minuta: 12
+...
+```
 
-**Charakterystyka:**
-- Kibic piłki nożnej lub zainteresowana osoba
-- Posiada ograniczony dostęp - tylko do odczytu danych
-- Nie może modyfikować danych w bazie
-- Nie ma dostępu do panelu administratora
+**Wyszukiwanie meczów po drużynie:**
+```
+5. Szukaj drużyny
+Wpisz nazwę: Bayern
+Znalezione mecze:
+2024-10-10 | Bayern 1:0 Juventus
+...
+```
 
-**Typowe zadania:**
-- Przeglądanie wyników meczów
-- Wyszukiwanie meczów konkretnej drużyny
-- Przeglądanie tabeli ligowej
-- Wyświetlanie szczegółów meczów (strzelcy, minuty bramek)
-- Przeglądanie listy zawodników drużyn
-
-**Domyślne konto testowe:**
-- Login: `kibic`
-- Hasło: `user123`
+---
 
 ---
 
@@ -726,34 +732,67 @@ python setup_db.py
 5. Usuń piłkarza (Delete)
 ```
 
-### 12.7 Przykładowe scenariusze użycia
 
-**Scenariusz 1: Kibic chce zobaczyć wyniki**
-```
-1. main_menu() → wybierz "3" (Przeglądaj mecze)
-2. Podaj ID sezonu: 9 (2024/2025)
-3. Wyświetlę się lista meczów z wynikami
-4. (opcjonalnie) Podaj ID meczu, aby zobaczyć strzelców
-```
+## Rozbudowane scenariusze użytkownika
 
-**Scenariusz 2: Admin dodaje wynik meczu**
-```
-1. main_menu() → "1" (Logowanie)
-2. Login: admin, Hasło: adminpass
-3. main_menu() → "6" (Panel ADMIN)
-4. Wybierz opcję "1" (Edytuj wynik)
-5. Podaj ID meczu, wynik, dodaj strzelców
-```
+### Przykład A: Organizator ligi szkolnej
+1. Tworzy konta dla siebie (admin) i kolegów (user)
+2. Wprowadza listę drużyn i piłkarzy
+3. Po każdym meczu wpisuje wyniki i strzelców
+4. Udostępnia kibicom możliwość przeglądania tabeli i statystyk
+5. W razie pomyłki – edytuje lub usuwa dane (tylko admin)
+
+### Przykład B: Kibic śledzi ulubioną drużynę
+1. Rejestruje się jako user
+2. Wyszukuje mecze swojej drużyny
+3. Przegląda szczegóły spotkań i statystyki strzelców
+4. Porównuje wyniki z innymi sezonami
+
+### Przykład C: Testowanie bezpieczeństwa
+1. Próbuje zalogować się na nieistniejące konto – system odrzuca
+2. Próbuje wstrzyknąć SQL w loginie – system blokuje
+3. Próbuje dodać mecz bez uprawnień – brak dostępu
 
 ---
 
+## Możliwości rozbudowy i integracji
+
+- Eksport danych do CSV/Excel
+- Integracja z aplikacją webową (np. Flask, Django REST)
+- Automatyczne pobieranie składów i wyników z API sportowych
+- Wersja mobilna (np. Kivy, React Native)
+- Rozszerzenie o statystyki zaawansowane (asysty, kartki, minuty na boisku)
+- System powiadomień e-mail/SMS o nowych wynikach
+
+---
+
+## Najczęściej zadawane pytania (FAQ)
+
+**Czy mogę dodać własne pola do tabel?**  
+Tak, wystarczy zmodyfikować plik `setup_db.py` i dodać odpowiednie kolumny oraz zmienić funkcje w `database.py`.
+
+**Czy można korzystać z bazy na kilku komputerach?**  
+Baza SQLite to pojedynczy plik – można go przenosić, kopiować, synchronizować przez chmurę.
+
+**Jak dodać nową rolę użytkownika?**  
+Należy dodać nową wartość w polu `role` w tabeli `users` i rozbudować logikę w `main.py`.
+
+**Czy system nadaje się do dużych lig?**  
+Tak, choć przy bardzo dużych bazach (tysiące meczów) warto rozważyć migrację do PostgreSQL/MySQL.
+
+**Jak zrobić backup?**  
+Wystarczy skopiować plik `football.db`.
+
+---
+
+
 ## Kontakt i wsparcie
 
-- **Projekt:** Football Match Center
-- **Autor:** Jakub Kubarek
-- **Wersja:** 1.0
-- **Data:** Styczeń 2026
-- **Technologia:** Python 3.7+, SQLite 3.0+
+Wszelkie pytania, zgłoszenia błędów i propozycje rozwoju:
+- e-mail: jakub.retmańczyk@example.com
+- github: github.com/jakubretmanczyk/football-match-center
+
+---
         string name
         date start_date
     }

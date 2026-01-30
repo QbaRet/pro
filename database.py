@@ -80,7 +80,6 @@ def get_matches_by_season(season_id):
     return matches
 def get_season_standings(season_id):
     matches = get_matches_by_season(season_id)
-    # Słownik: { 'Real Madryt': {'m': 0, 'w': 0, 'd': 0, 'l': 0, 'pts': 0, 'gz': 0, 'gs': 0} }
     table = {}
     
     def init_team(name):
