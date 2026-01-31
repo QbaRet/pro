@@ -347,16 +347,16 @@ Baza danych zawiera **7 tabel** w strukturze relacyjnej.
 
 Baza danych jest w **trzeciej postaci normalnej (3NF)**.
 
-#### Pierwsza postać normalna (1NF) ✓
+#### Pierwsza postać normalna (1NF) 
 - Wszystkie kolumny przechowują wartości atomowe, bez możliwości dalszego podziału- Brak powtarzających się grup atrybutów
 - Nie występują powtarzające się zestawy danych w obrębie jednej tabeli
 - Każda tabela posiada jednoznacznie określony klucz główny
 
-#### Druga postać normalna (2NF) ✓
+#### Druga postać normalna (2NF) 
 - Spełnione są wymagania pierwszej postaci normalnej
 - Każdy atrybut niebędący kluczem jest w pełni zależny od całego klucza głównego
 - W tabelach z kluczem prostym warunek ten jest spełniony automatycznie
-#### Trzecia postać normalna (3NF) ✓
+#### Trzecia postać normalna (3NF) 
 - Spełnione są założenia drugiej postaci normalne
 - Nie występują zależności przechodnie pomiędzy atrybutami niekluczowymi
 - Przykładowo w tabeli match_events pola event_type oraz minute zależą bezpośrednio od identyfikatora rekordu, a nie od innych kolumn
@@ -550,10 +550,10 @@ def add_match_results(match_id, h_score, a_score, scorers_list):
 
 ### 10.4 ACID w praktyce
 
-- **Atomicity** ✓ - Albo wszystkie operacje, albo żadna
-- **Consistency** ✓ - Baza pozostaje w spójnym stanie
-- **Isolation** ✓ - SQLite używa poziomego zamknięcia (locking)
-- **Durability** ✓ - Po commit, dane są trwale zapisane
+- **Atomicity**  - Albo wszystkie operacje, albo żadna
+- **Consistency**  - Baza pozostaje w spójnym stanie
+- **Isolation**  - SQLite używa poziomego zamknięcia (locking)
+- **Durability**  - Po commit, dane są trwale zapisane
 
 ---
 
