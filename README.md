@@ -11,9 +11,9 @@
 
 ## Spis treści
 
-1. [Architektura i filozofia projektu](#architektura-i-filozofia-projektu)
+1. [Architektura projektu](#architektura-i-filozofia-projektu)
 2. [Przykładowe użycie CLI](#przykladowe-uzycie-cli)
-3. [Rozbudowane scenariusze użytkownika](#rozbudowane-scenariusze-uzytkownika)
+3. [Wymagania funkcjonalne](#rozbudowane-scenariusze-uzytkownika)
 4. [Schemat bazy danych](#schemat-bazy-danych)
 5. [Opis tabel](#opis-tabel)
 6. [Relacje między tabelami](#relacje-miedzy-tabelami)
@@ -21,15 +21,14 @@
 8. [Prawa dostępu](#prawa-dostepu)
 9. [Trigger SQL](#trigger-sql)
 10. [Transakcje i spójność](#transakcje-i-spojnosc)
-11. [Bezpieczeństwo](#bezpieczenstwo)
-12. [Możliwości rozbudowy i integracji](#mozliwosci-rozbudowy-i-integracji)
-13. [Instrukcja uruchomienia](#instrukcja-uruchomienia)
+11. [Ochrona](#bezpieczenstwo)
+12. [Instrukcja uruchomienia](#mozliwosci-rozbudowy-i-integracji)
 
 
 ---
 
 
-## Architektura i filozofia projektu
+## Architektura projektu
 
 Projekt jest prosty i nieskomplikowany. Każda funkcja CLI jest osobnym, czytelnym modułem. Dane przechowywane są w relacyjnej bazie SQLite, co zapewnia łatwość przenoszenia i brak wymagań serwerowych. System jest odporny na typowe błędy użytkownika (np. podwójne wpisy, nieprawidłowe dane) dzięki walidacji i transakcjom.
 
