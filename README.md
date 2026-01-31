@@ -343,28 +343,27 @@ Baza danych zawiera **7 tabel** w strukturze relacyjnej.
 
 ## 7. Normalizacja bazy danych
 
-### 7.1 Analiza postaci normalnych
+### 7.1 Pokazanie normalizacji
 
 Baza danych jest w **trzeciej postaci normalnej (3NF)**.
 
 #### Pierwsza postać normalna (1NF) ✓
-- Wszystkie atrybuty są atomowe (niepodzielne)
-- Brak powtarzających się grup atrybutów
-- Każda tabela ma klucz główny
+- Wszystkie kolumny przechowują wartości atomowe, bez możliwości dalszego podziału- Brak powtarzających się grup atrybutów
+- Nie występują powtarzające się zestawy danych w obrębie jednej tabeli
+- Każda tabela posiada jednoznacznie określony klucz główny
 
 #### Druga postać normalna (2NF) ✓
-- Spełniona 1NF
-- Wszystkie atrybuty niekluczowe zależą od całego klucza głównego
-- W tabelach bez klucza złożonego warunek jest trywialnie spełniony
-
+- Spełnione są wymagania pierwszej postaci normalnej
+- Każdy atrybut niebędący kluczem jest w pełni zależny od całego klucza głównego
+- W tabelach z kluczem prostym warunek ten jest spełniony automatycznie
 #### Trzecia postać normalna (3NF) ✓
-- Spełniona 2NF
-- Brak zależności przechodnich między atrybutami niekluczowymi
-- Przykład: w `match_events` atrybuty (event_type, minute) zależą bezpośrednio od `id`, nie od innych atrybutów niekluczowych
+- Spełnione są założenia drugiej postaci normalne
+- Nie występują zależności przechodnie pomiędzy atrybutami niekluczowymi
+- Przykładowo w tabeli match_events pola event_type oraz minute zależą bezpośrednio od identyfikatora rekordu, a nie od innych kolumn
 
 ### 7.2 Redundancja danych
 
-Baza **nie ma celowej redundancji**. Wszystkie dane przechowywane są w jednym miejscu:
+Wszystkie dane przechowywane są w jednym miejscu, więc w aplikacji ** nie ma celowej redundancji danych **.
 
 | Dane | Lokalizacja | Uzasadnienie |
 |------|-------------|--------------|
@@ -378,9 +377,9 @@ Baza **nie ma celowej redundancji**. Wszystkie dane przechowywane są w jednym m
 
 ## 8. Prawa dostępu
 
-System implementuje **dwa poziomy dostępu** na poziomie aplikacji:
+W systemie możliwe są dwa poziomy dostępu do aplikacji:
 
-### 8.1 Macierz uprawnień
+### 8.1 Tabela uprawnień
 
 | Komponent | Administrator | Użytkownik |
 |-----------|----------------|-----------|
@@ -420,7 +419,7 @@ System implementuje **dwa poziomy dostępu** na poziomie aplikacji:
 | Modyfikacja danych | ✗ |
 | Przeglądanie logów audytu | ✗ |
 
-### 8.4 Implementacja kontroli dostępu
+### 8.4 Kontrola dostępu w aplikacji
 
 Kontrola dostępu w aplikacji:
 ```python
@@ -439,13 +438,13 @@ if current_user and current_user[1] == 'admin':
 
 ---
 
-## 9. Trigger SQL
+## 9. Trigger 
 
 ### 9.1 Cel triggera
 
-Automatyczne logowanie zmian wyników meczów do tabeli `audit_logs`. Trigger jest kluczowym elementem audytu systemu, umożliwiającym śledzenie wszystkich zmian wyników oraz ochraniającym przed manipulacją danych.
+Każda aktualizacja wyniku meczu uruchamia trigger SQL, który zapisuje poprzedni i nowy rezultat w tabeli audit_logs. Rozwiązanie to zapewnia możliwość odtworzenia historii zmian i stanowi zabezpieczenie przed manipulacją danymi
 
-### 9.2 Definicja triggera
+### 9.2 Implementacja triggera
 
 ```sql
 CREATE TRIGGER IF NOT EXISTS log_score_change
@@ -460,16 +459,7 @@ BEGIN
 END;
 ```
 
-### 9.3 Mechanizm działania
-
-1. **Wyzwalacz:** Trigger uruchamia się PO zaaktualizowaniu kolumn `home_score` lub `away_score`
-2. **Akcja:** Automatycznie wstawia rekord do `audit_logs` z:
-   - ID meczu
-   - Poprzednim wynikiem (w formacie "X:Y")
-   - Nowym wynikiem (w formacie "X:Y")
-   - Czasem zmiany (CURRENT_TIMESTAMP)
-
-### 9.4 Przykład działania
+### 9.3 Przykład działania
 
 **Scenariusz:** Administratorem zmienia wynik meczu
 
@@ -508,12 +498,10 @@ SELECT * FROM audit_logs WHERE match_id = 1 ORDER BY change_date;
 
 ### 10.1 Opis problemu
 
-Przy dodawaniu wyniku meczu i strzelców konieczne jest:
+Wprowadzanie rezultatu meczu do bazy danych jest operacją złożoną, która wymaga jednoczesnej modyfikacji kilku obszarów systemu. Aby zapewnić standard integralności danych, proces ten realizowany jest jako operacja atomowa.
 1. Zaaktualizowanie wyniku w tabeli `matches`
 2. Dodanie wpisów dla każdego strzelcy w tabeli `match_events`
 3. Zautomatyzowanie logowania w `audit_logs` (trigger)
-
-Te operacje muszą być wykonane **atomowo** 
 
 ### 10.2 Implementacja transakcji
 
@@ -569,7 +557,7 @@ def add_match_results(match_id, h_score, a_score, scorers_list):
 
 ---
 
-## 11. Bezpieczeństwo
+## 11. Ochrona
 
 ### 11.1 Hashowanie haseł
 
@@ -587,14 +575,9 @@ def verify_password(stored_hash, password):
 1. Użytkownik wpisuje hasło w plaintext
 2. Hasło jest haszowane (algorytm SHA-256)
 3. Hash jest porównywany z hashem zapisanym w bazie
-4. W bazie nigdy nie jest przechowywane plaintext hasła
+4. W bazie nie jest przechowywane plaintext hasła
 
-**Bezpieczeństwo:**
-- SHA-256 jest funkcją односtronna (nie da się odtworzyć hasła z hasha)
-- Każde hasło daje unikalny hash
-- Nawet identyczne hasła będą miały taki sam hash (deterministycznie)
-
-**Domyślne hasła (dla celów testowych):**
+**Domyślne hasła:**
 - Admin: `adminpass` → hash: `8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918`
 - User: `user123` → hash: `0d9b5d7c2c5f3c3d8e9c8b8f8c8c8b8c...`
 
@@ -603,10 +586,10 @@ def verify_password(stored_hash, password):
 System używa **parametryzowanych zapytań** (prepared statements):
 
 ```python
-# ✓ BEZPIECZNE - parametry są oddzielone od SQL
+# BEZPIECZNE 
 c.execute('SELECT id, role FROM users WHERE username = ?', (username,))
 
-# ✗ NIEBEZPIECZNE - concatenacja stringów
+# NIEBEZPIECZNE 
 c.execute(f"SELECT id, role FROM users WHERE username = '{username}'")
 ```
 
@@ -627,14 +610,6 @@ else:
     # Pokaż tylko opcje dla użytkownika zwykłego
     show_user_menu()
 ```
-
-### 11.4 Brak danych wrażliwych w logach
-
-- Hasła nigdy nie są logowane
-- Logi zmian (`audit_logs`) zawierają tylko wyniki meczów, nie dane użytkowników
-- Zmiany są rejestrowane z timestamp dla audytu
-
----
 
 ## 12. Instrukcja uruchomienia
 
